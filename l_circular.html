@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+
+        class Base{
+            constructor(nombre, minutos){
+                this.nombre = nombre;
+                this.minutos = minutos;
+                this.sig = null;
+                this.ant = null;
+            }
+        
+        }
+
+        class rutas{
+            constructor(){
+                this.primero = null;
+                this.cont = 0;
+            }
+
+            agregar(nuevo){
+                if(this.primero == null){
+                    this.primero = nuevo;
+                    nuevo.sig = this.primero;
+                    nuevo.ant = this.primero;
+                    this.cont++;
+                } else{
+                    nuevo.sig = this.primero;
+                    nuevo.ant = this.primero.ant;
+                    this.primero.ant = nuevo;
+                    nuevo.ant.sig = nuevo;
+                    this.cont++;
+                }
+            }
+
+                extraer(nombre){
+                let aux = this.primero;
+                let temp = "";
+                if(aux == null){
+                    return false;
+                } 
+                if(this.cont == 1){
+                    this.primero = null;
+                    this.cont--;
+                    return true;
+                }
+                if(nombre == this.primero.nombre){
+                    aux.ant.sig = aux.sig;
+                    aux.sig.ant = aux.ant;
+                    this.primero = aux.sig;
+                    this.cont--;
+                    return true;
+
+                }
+               
+
+                while(temp != this.primero.nombre){
+                    if(temp == nombre){  
+                    aux.ant.sig = aux.sig;
+                    aux.sig.ant = aux.ant
+                    this.cont--;
+                    return true;
+                }
+                 
+                aux = aux.sig;
+                temp = aux.nombre;
+            }
+            return false;
+        }
+
+        buscar(nombre){
+            let aux = this.primero;
+            let temp = "";
+            if(aux == null){
+                return false;
+            }
+            if(nombre == this.primero.nombre){
+                return aux;
+            }
+            while(temp != this.primero.nombre){
+                if(temp == nombre){
+                    return aux;
+                }
+                aux = aux.sig;
+                temp = aux.nombre;
+            }
+            return false;
+        }
+
+        imprimir(){
+            let aux = this.primero;
+            let res = "";
+            let temp = "";
+            if(aux == null){
+                return false;
+            }
+            while(temp != this.primero.nombre){
+                res += aux.nombre + " -> ";	
+                aux = aux.sig;
+                temp = aux.nombre;
+            }
+            return res;
+        }
+        
+        recorrido(baseInicio, horaInicio, minutoInicio, horaFin, minutoFin){
+          let res =  this.buscar(baseInicio);
+            if(res != false){
+                let tiempo_f = (horaFin * 60) + minutoFin;
+                let tiempo_i = minutoInicio + (horaInicio * 60);
+                let validación = false;
+                let res2 = "";
+                let temp = "";
+                let aux = res;
+                while(temp != temp.sig){
+
+                    if(tiempo_i >= tiempo_f){
+                        console.log("Horas:"+Math.trunc(tiempo_i/60) + "Minutos:" + tiempo_i%60);
+                        return res2;
+                    }
+                    console.log("Paso por la base"+aux.nombre+"Horas:"+Math.trunc(tiempo_i/60) + "Minutos:" + tiempo_i%60);
+                    tiempo_i += aux.minutos;
+                    res2 += aux.nombre + " -> ";
+                    aux = aux.sig;
+                    temp = aux.nombre;
+                }
+
+                
+             
+            }
+            return false;
+        }
+
+    }
+
+
+
+const ruta = new rutas();
+let base = new Base("1",20);
+ruta.agregar(base);
+base = new Base("2",30);
+ruta.agregar(base);
+base = new Base("3",15);
+ruta.agregar(base);
+base = new Base("4",10);
+ruta.agregar(base);
+console.log(ruta.imprimir());
+//ruta.extraer("3");
+console.log(ruta.imprimir());
+console.log(ruta.buscar("1"));
+console.log(ruta.recorrido("3",9,5,20,10));
+
+    </script>
+    
+</body>
+</html>
